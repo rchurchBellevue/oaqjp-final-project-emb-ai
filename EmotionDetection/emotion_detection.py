@@ -13,26 +13,37 @@ def emotion_detector(text_to_analyse):  # using a string input return back the e
     
     # Send the API our payload
     response = requests.post(url, json = myobj, headers=header)  
-    # parse JSON response
-    formatted_response = json.loads(response.text)
-    #pull out dictionary of emotions
-    emotion_dict=formatted_response['emotionPredictions'][0]['emotion']
-    #define a variable for each
-    anger = emotion_dict['anger']
-    disgust = emotion_dict['disgust']
-    fear = emotion_dict['fear']
-    joy = emotion_dict['joy']
-    sadness = emotion_dict['sadness']
-    #find the max score and the corresponding key
-    dominant_emotion = max(emotion_dict, key=emotion_dict.get)
-    #ready formatted response
-    formatted_response_dict={
-        'anger': anger,
-        'disgust':disgust,
-        'fear': fear,
-        'joy': joy,
-        'sadness': sadness,
-        'dominant_emotion': dominant_emotion
-    }
-    
+    status_code = response.status_code
+
+    if status_code == 200:
+        formatted_response = json.loads(response.text)
+        #pull out dictionary of emotions
+        emotion_dict=formatted_response['emotionPredictions'][0]['emotion']
+        #define a variable for each
+        anger = emotion_dict['anger']
+        disgust = emotion_dict['disgust']
+        fear = emotion_dict['fear']
+        joy = emotion_dict['joy']
+        sadness = emotion_dict['sadness']
+        #find the max score and the corresponding key
+        dominant_emotion = max(emotion_dict, key=emotion_dict.get)
+        #ready formatted response
+        formatted_response_dict={
+            'anger': anger,
+            'disgust':disgust,
+            'fear': fear,
+            'joy': joy,
+            'sadness': sadness,
+            'dominant_emotion': dominant_emotion
+        }
+    elif status_code==400:
+        formatted_response_dict={
+        'anger': None,
+        'disgust':None,
+        'fear': None,
+        'joy': None,
+        'sadness': None,
+        'dominant_emotion': None
+        }
+
     return formatted_response_dict
