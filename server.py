@@ -17,6 +17,8 @@ def sent_analyzer():
     'joy': {response['joy']}, 'sadness': {response['sadness']}.
     The dominant emotion is <strong>{response['dominant_emotion']}</strong>."""
 
+    return response_str
+
 @app.route("/")
 def render_index_page():
     return render_template('index.html')
